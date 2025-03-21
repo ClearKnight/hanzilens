@@ -393,7 +393,7 @@ class _ResultScreenState extends State<ResultScreen> {
             borderRadius: BorderRadius.circular(8),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.2),
+                color: Colors.black.withAlpha(51),
                 blurRadius: 4,
                 offset: const Offset(0, 2),
               ),
@@ -452,7 +452,7 @@ class _ResultScreenState extends State<ResultScreen> {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha(51),
             blurRadius: 10,
             spreadRadius: 1,
           ),
@@ -465,7 +465,7 @@ class _ResultScreenState extends State<ResultScreen> {
             width: 80,
             height: 80,
             decoration: BoxDecoration(
-              color: const Color(0xFF1E88E5).withOpacity(0.1),
+              color: const Color(0xFF1E88E5).withAlpha(26),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Center(

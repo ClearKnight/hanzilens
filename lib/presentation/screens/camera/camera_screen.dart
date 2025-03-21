@@ -265,7 +265,7 @@ class _CameraScreenState extends State<CameraScreen>
                         color: Colors.white,
                         width: 2,
                       ),
-                      color: Colors.black26,
+                      color: Colors.black.withAlpha(77),
                     ),
                   ),
 
@@ -280,7 +280,7 @@ class _CameraScreenState extends State<CameraScreen>
                         borderRadius: BorderRadius.circular(35),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.3),
+                            color: Colors.black.withAlpha(77),
                             blurRadius: 10,
                             spreadRadius: 2,
                           ),
@@ -290,7 +290,7 @@ class _CameraScreenState extends State<CameraScreen>
                         margin: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: Colors.black.withOpacity(0.2),
+                            color: Colors.black.withAlpha(51),
                             width: 2,
                           ),
                           borderRadius: BorderRadius.circular(35),
@@ -309,7 +309,7 @@ class _CameraScreenState extends State<CameraScreen>
                       height: 40,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Colors.grey.withOpacity(0.5),
+                        color: Colors.grey.withAlpha(128),
                       ),
                       child: const Icon(
                         Icons.flip_camera_ios,
