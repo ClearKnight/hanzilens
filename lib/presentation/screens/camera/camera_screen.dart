@@ -18,6 +18,7 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen>
     with WidgetsBindingObserver {
   CameraController? _cameraController;
+  bool _isFlashOn = false;
 
   @override
   void initState() {
@@ -94,6 +95,19 @@ class _CameraScreenState extends State<CameraScreen>
     context.read<CameraBloc>().add(TakePicture(controller: cameraController));
   }
 
+  /// 切换闪光灯
+  void _toggleFlash() {
+    if (_cameraController != null && _cameraController!.value.isInitialized) {
+      setState(() {
+        _isFlashOn = !_isFlashOn;
+      });
+
+      _cameraController!.setFlashMode(
+        _isFlashOn ? FlashMode.torch : FlashMode.off,
+      );
+    }
+  }
+
   /// 显示相机错误
   void _showCameraError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -104,17 +118,7 @@ class _CameraScreenState extends State<CameraScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('拍照识别'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.flash_on),
-            onPressed: () {
-              context.read<CameraBloc>().add(const ToggleFlash());
-            },
-          ),
-        ],
-      ),
+      backgroundColor: Colors.black,
       body: BlocConsumer<CameraBloc, CameraState>(
         listener: (context, state) {
           if (state is CameraReady && _cameraController == null) {
@@ -130,72 +134,192 @@ class _CameraScreenState extends State<CameraScreen>
         },
         builder: (context, state) {
           if (state is CameraLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(
+                color: Colors.white,
+              ),
+            );
           }
 
           if (state is CameraReady || state is TakingPicture) {
-            return _buildCameraPreview();
+            return _buildCameraUI();
           }
 
           return const Center(
-            child: Text('初始化相机中...'),
+            child: Text(
+              '初始化相机中...',
+              style: TextStyle(color: Colors.white),
+            ),
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _takePicture,
-        child: const Icon(Icons.camera_alt),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
-  /// 构建相机预览
-  Widget _buildCameraPreview() {
+  /// 构建相机UI
+  Widget _buildCameraUI() {
     final cameraController = _cameraController;
     if (cameraController == null || !cameraController.value.isInitialized) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(
+        child: CircularProgressIndicator(
+          color: Colors.white,
+        ),
+      );
     }
 
-    return Column(
+    return Stack(
       children: [
-        Expanded(
+        // 相机预览
+        Positioned.fill(
           child: AspectRatio(
-            aspectRatio: 1 / cameraController.value.aspectRatio,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                CameraPreview(cameraController),
-                // 添加取景框
-                Positioned.fill(
-                  child: Container(
+            aspectRatio: cameraController.value.aspectRatio,
+            child: CameraPreview(cameraController),
+          ),
+        ),
+
+        // 顶部控制栏
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // 关闭按钮
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      child: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    ),
+                  ),
+
+                  // 闪光灯和计时器控制
+                  Row(
+                    children: [
+                      // 闪光灯按钮
+                      GestureDetector(
+                        onTap: _toggleFlash,
+                        child: Container(
+                          padding: const EdgeInsets.all(8.0),
+                          margin: const EdgeInsets.only(right: 16.0),
+                          child: Icon(
+                            _isFlashOn ? Icons.flash_on : Icons.flash_off,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                      // 计时器按钮
+                      GestureDetector(
+                        onTap: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('计时器功能尚未实现'),
+                              duration: Duration(seconds: 1),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(8.0),
+                          child: const Icon(
+                            Icons.timer,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+
+        // 底部控制栏
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // 缩略图（假的，目前不可点击）
+                  Container(
+                    width: 40,
+                    height: 40,
                     decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
                       border: Border.all(
                         color: Colors.white,
-                        width: 2.0,
+                        width: 2,
                       ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    margin: const EdgeInsets.all(60),
-                  ),
-                ),
-                // 指导文本
-                Positioned(
-                  bottom: 20,
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.black54,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Text(
-                      '将物体放在框内，点击拍照按钮',
-                      style: TextStyle(color: Colors.white),
+                      color: Colors.black26,
                     ),
                   ),
-                ),
-              ],
+
+                  // 快门按钮
+                  GestureDetector(
+                    onTap: _takePicture,
+                    child: Container(
+                      width: 70,
+                      height: 70,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(35),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.3),
+                            blurRadius: 10,
+                            spreadRadius: 2,
+                          ),
+                        ],
+                      ),
+                      child: Container(
+                        margin: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black.withOpacity(0.2),
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(35),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // 翻转相机按钮
+                  GestureDetector(
+                    onTap: () {
+                      context.read<CameraBloc>().add(const SwitchCamera());
+                    },
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.grey.withOpacity(0.5),
+                      ),
+                      child: const Icon(
+                        Icons.flip_camera_ios,
+                        color: Colors.white,
+                        size: 18,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

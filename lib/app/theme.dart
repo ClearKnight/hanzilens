@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
   // 颜色常量
-  static const Color primaryColor = Color(0xFF4E8FE2);
+  static const Color primaryColor = Color(0xFF1E88E5);
   static const Color secondaryColor = Color(0xFFFF6B6B);
-  static const Color backgroundColor = Color(0xFFF5F7FA);
+  static const Color backgroundColor = Color(0xFFF5F5F7);
   static const Color errorColor = Color(0xFFE53935);
 
   // 文字颜色
@@ -38,11 +38,30 @@ class AppTheme {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
+        backgroundColor: primaryColor,
+        foregroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
       ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: primaryColor,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      ),
+    ),
+    iconTheme: const IconThemeData(
+      color: primaryColor,
+      size: 24,
+    ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: Colors.white,
+      selectedItemColor: primaryColor,
+      unselectedItemColor: textThirdColor,
+      type: BottomNavigationBarType.fixed,
+      elevation: 8,
     ),
     fontFamily: 'NotoSansSC',
   );
@@ -73,11 +92,30 @@ class AppTheme {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
+        backgroundColor: primaryColor,
+        foregroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
       ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: primaryColor,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      ),
+    ),
+    iconTheme: const IconThemeData(
+      color: primaryColor,
+      size: 24,
+    ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: Color(0xFF1E1E1E),
+      selectedItemColor: primaryColor,
+      unselectedItemColor: textThirdColor,
+      type: BottomNavigationBarType.fixed,
+      elevation: 8,
     ),
     fontFamily: 'NotoSansSC',
   );

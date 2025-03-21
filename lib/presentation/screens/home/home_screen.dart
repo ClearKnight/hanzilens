@@ -10,121 +10,149 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('汉字学习'),
-        // 移除设置按钮，因为设置页面尚未实现
-        // actions: [
-        //   IconButton(
-        //     icon: const Icon(Icons.settings),
-        //     onPressed: () {
-        //       Navigator.of(context).pushNamed(AppRoutes.settings);
-        //     },
-        //   ),
-        // ],
-      ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 欢迎消息
-              const Text(
-                '欢迎使用HanziLens',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 8),
-
-              // MVP说明
-              Container(
-                padding: const EdgeInsets.all(12),
-                margin: const EdgeInsets.only(bottom: 16),
-                decoration: BoxDecoration(
-                  color: Colors.blue.withAlpha(25),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
+          children: [
+            // 主要内容
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'MVP版本',
+                    const Text(
+                      'HanziLens',
                       style: TextStyle(
+                        fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: Colors.blue,
+                        color: Color(0xFF1E88E5),
                       ),
                     ),
-                    SizedBox(height: 4),
-                    Text(
-                      '当前为最小可行产品版本，仅支持拍照识别功能。其他功能将在后续版本中添加。',
-                      style: TextStyle(fontSize: 12),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Learn Chinese characters by taking photos',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Color(0xFF666666),
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                  ],
-                ),
-              ),
-
-              // 功能卡片
-              Expanded(
-                child: GridView.count(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 16,
-                  crossAxisSpacing: 16,
-                  children: [
-                    // 拍照识别 - 已实现
-                    _buildFeatureCard(
-                      context,
-                      icon: Icons.camera_alt,
-                      title: '拍照识别',
-                      description: '拍照识别物体并学习汉字',
+                    const SizedBox(height: 64),
+                    // 相机按钮
+                    InkWell(
                       onTap: () =>
                           Navigator.of(context).pushNamed(AppRoutes.camera),
-                      isEnabled: true,
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1E88E5),
+                          borderRadius: BorderRadius.circular(50),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withAlpha(51),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            )
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.camera_alt,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                      ),
                     ),
-                    // 学习记录 - 未实现
-                    _buildFeatureCard(
-                      context,
-                      icon: Icons.history,
-                      title: '学习记录',
-                      description: '查看已学习的汉字',
-                      onTap: () {
-                        _showFeatureNotAvailable(context);
-                      },
-                      isEnabled: false,
-                    ),
-                    // 汉字搜索 - 未实现
-                    _buildFeatureCard(
-                      context,
-                      icon: Icons.search,
-                      title: '汉字搜索',
-                      description: '搜索汉字和释义',
-                      onTap: () {
-                        _showFeatureNotAvailable(context);
-                      },
-                      isEnabled: false,
-                    ),
-                    // 学习进度 - 未实现
-                    _buildFeatureCard(
-                      context,
-                      icon: Icons.school,
-                      title: '学习进度',
-                      description: '查看学习统计信息',
-                      onTap: () {
-                        _showFeatureNotAvailable(context);
-                      },
-                      isEnabled: false,
+                    const SizedBox(height: 12),
+                    const Text(
+                      'Tap the camera to start',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Color(0xFF999999),
+                      ),
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+
+            // 底部导航栏
+            Container(
+              height: 60,
+              decoration: const BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    color: Color(0xFFEEEEEE),
+                    width: 1,
+                  ),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildTabItem(
+                    icon: Icons.home,
+                    label: 'Home',
+                    isActive: true,
+                    onTap: () {},
+                  ),
+                  _buildTabItem(
+                    icon: Icons.history,
+                    label: 'History',
+                    isActive: false,
+                    onTap: () {
+                      _showFeatureNotAvailable(context);
+                    },
+                  ),
+                  _buildTabItem(
+                    icon: Icons.settings,
+                    label: 'Settings',
+                    isActive: false,
+                    onTap: () {
+                      _showFeatureNotAvailable(context);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.of(context).pushNamed(AppRoutes.camera),
-        child: const Icon(Icons.camera_alt),
+    );
+  }
+
+  /// 构建底部选项卡项
+  Widget _buildTabItem({
+    required IconData icon,
+    required String label,
+    required bool isActive,
+    required VoidCallback onTap,
+  }) {
+    final color = isActive ? const Color(0xFF1E88E5) : const Color(0xFFAAAAAA);
+
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        width: 80,
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              color: color,
+              size: 20,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                color: color,
+                fontSize: 10,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -135,78 +163,6 @@ class HomeScreen extends StatelessWidget {
       const SnackBar(
         content: Text('此功能在MVP版本中尚未实现'),
         duration: Duration(seconds: 2),
-      ),
-    );
-  }
-
-  /// 构建功能卡片
-  Widget _buildFeatureCard(
-    BuildContext context, {
-    required IconData icon,
-    required String title,
-    required String description,
-    required VoidCallback onTap,
-    required bool isEnabled,
-  }) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                icon,
-                size: 48,
-                color: isEnabled
-                    ? Theme.of(context).primaryColor
-                    : Colors.grey.shade400,
-              ),
-              const SizedBox(height: 12),
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: isEnabled ? Colors.black : Colors.grey.shade500,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                description,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 12,
-                  color:
-                      isEnabled ? Colors.grey.shade600 : Colors.grey.shade400,
-                ),
-              ),
-              if (!isEnabled)
-                Container(
-                  margin: const EdgeInsets.only(top: 8),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: const Text(
-                    '即将推出',
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        ),
       ),
     );
   }
