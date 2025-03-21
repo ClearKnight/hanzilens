@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HanziLens - Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #ffffff;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            -webkit-tap-highlight-color: transparent; /* 移除默认点击高亮 */
+        }
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .app-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1E88E5;
+            margin-bottom: 8px;
+        }
+        .app-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 64px;
+            text-align: center;
+        }
+        .camera-button {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #1E88E5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 16px;
+            transition: all 0.15s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+        .camera-button:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            background-color: #1976D2;
+        }
+        /* 添加点击涟漪效果 */
+        .camera-button::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 70%);
+            opacity: 0;
+            transform: scale(0);
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+        .camera-button:active::after {
+            opacity: 1;
+            transform: scale(2);
+        }
+        .camera-icon {
+            color: white;
+            font-size: 40px;
+        }
+        .camera-hint {
+            font-size: 13px;
+            color: #999;
+            margin-top: 12px;
+        }
+        .tab-bar {
+            height: 60px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+        }
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+        .tab-item:active {
+            transform: scale(0.9);
+        }
+        .tab-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+            transition: color 0.2s ease;
+        }
+        .tab-label {
+            font-size: 10px;
+            transition: color 0.2s ease;
+        }
+        .active-tab {
+            color: #1E88E5;
+        }
+        .inactive-tab {
+            color: #aaa;
+        }
+        .inactive-tab:active {
+            color: #66B2FF;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <div class="app-title">HanziLens</div>
+        <div class="app-description">Learn Chinese characters by taking photos</div>
+        
+        <a href="camera.html" class="camera-button">
+            <i class="fas fa-camera camera-icon"></i>
+        </a>
+        
+        <div class="camera-hint">Tap the camera to start</div>
+    </div>
+    
+    <div class="tab-bar">
+        <a href="home.html" class="tab-item">
+            <i class="fas fa-home tab-icon active-tab"></i>
+            <span class="tab-label active-tab">Home</span>
+        </a>
+        <a href="history.html" class="tab-item">
+            <i class="fas fa-history tab-icon inactive-tab"></i>
+            <span class="tab-label inactive-tab">History</span>
+        </a>
+        <a href="settings.html" class="tab-item">
+            <i class="fas fa-cog tab-icon inactive-tab"></i>
+            <span class="tab-label inactive-tab">Settings</span>
+        </a>
+    </div>
+</body>
+</html> 
